@@ -1,0 +1,282 @@
+@page
+@model MedicalRegistration.Pages.Visits.IndexModel
+@using MedicalRegistration.Models
+@{
+    ViewData["Title"] = "Список визитов";
+    ViewData["Breadcrumb"] = "<li class=\"breadcrumb-item\"><a href=\"/\">Главная</a></li><li class=\"breadcrumb-item active\">Визиты</li>";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="bi bi-calendar-check text-success me-2"></i>
+        Список визитов
+    </h1>
+    <div>
+        <a asp-page="Create" class="btn btn-success">
+            <i class="bi bi-plus-circle me-1"></i>
+            Записать на прием
+        </a>
+    </div>
+</div>
+
+<!-- Search and Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label for="searchTerm" class="form-label">
+                    <i class="bi bi-search me-1"></i>Поиск
+                </label>
+                <input type="text" class="form-control" name="searchTerm" 
+                       value="@Model.SearchTerm" placeholder="Пациент, врач, жалобы...">
+            </div>
+            <div class="col-md-3">
+                <label for="status" class="form-label">
+                    <i class="bi bi-funnel me-1"></i>Статус
+                </label>
+                <select name="status" class="form-select">
+                    <option value="">Все статусы</option>
+                    <option value="1" selected="@(Model.SelectedStatus == 1)">Запланирован</option>
+                    <option value="2" selected="@(Model.SelectedStatus == 2)">В процессе</option>
+                    <option value="3" selected="@(Model.SelectedStatus == 3)">Завершен</option>
+                    <option value="4" selected="@(Model.SelectedStatus == 4)">Отменен</option>
+                    <option value="5" selected="@(Model.SelectedStatus == 5)">Пациент не явился</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label for="startDate" class="form-label">С даты</label>
+                <input type="date" class="form-control" name="startDate" value="@Model.StartDate?.ToString("yyyy-MM-dd")">
+            </div>
+            <div class="col-md-2">
+                <label for="endDate" class="form-label">По дату</label>
+                <input type="date" class="form-control" name="endDate" value="@Model.EndDate?.ToString("yyyy-MM-dd")">
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Statistics -->
+<div class="row g-3 mb-4">
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 bg-primary text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-calendar-check fs-1 mb-2"></i>
+                <h4>@Model.TotalVisits</h4>
+                <small>Всего визитов</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 bg-warning text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-clock fs-1 mb-2"></i>
+                <h4>@Model.ScheduledVisits</h4>
+                <small>Запланировано</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 bg-info text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-activity fs-1 mb-2"></i>
+                <h4>@Model.InProgressVisits</h4>
+                <small>В процессе</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+        <div class="card border-0 bg-success text-white">
+            <div class="card-body text-center">
+                <i class="bi bi-check-circle fs-1 mb-2"></i>
+                <h4>@Model.CompletedVisits</h4>
+                <small>Завершено</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Visits Table -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="bi bi-list me-2"></i>
+            Визиты (@Model.Visits.Count())
+        </h5>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.Visits.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Дата и время</th>
+                            <th>Пациент</th>
+                            <th>Врач</th>
+                            <th>Специальность</th>
+                            <th>Статус</th>
+                            <th>Стоимость</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var visit in Model.Visits)
+                        {
+                            <tr>
+                                <td>
+                                    <strong>@visit.VisitDateTime.ToString("dd.MM.yyyy")</strong><br>
+                                    <small class="text-muted">@visit.VisitDateTime.ToString("HH:mm")</small>
+                                </td>
+                                <td>
+                                    <a asp-page="/Patients/Details" asp-route-id="@visit.PatientId" 
+                                       class="text-decoration-none">
+                                        <strong>@visit.Patient.FullName</strong>
+                                    </a><br>
+                                    <small class="text-muted">Карта: @visit.Patient.MedicalCardNumber</small>
+                                </td>
+                                <td>@visit.DoctorName</td>
+                                <td>
+                                    <span class="badge bg-info">@visit.Specialty</span>
+                                </td>
+                                <td>
+                                    @switch (visit.Status)
+                                    {
+                                        case VisitStatus.Scheduled:
+                                            <span class="badge bg-warning">Запланирован</span>
+                                            break;
+                                        case VisitStatus.InProgress:
+                                            <span class="badge bg-info">В процессе</span>
+                                            break;
+                                        case VisitStatus.Completed:
+                                            <span class="badge bg-success">Завершен</span>
+                                            break;
+                                        case VisitStatus.Cancelled:
+                                            <span class="badge bg-danger">Отменен</span>
+                                            break;
+                                        case VisitStatus.NoShow:
+                                            <span class="badge bg-secondary">Не явился</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @if (visit.Cost.HasValue)
+                                    {
+                                        <strong>@visit.Cost.Value.ToString("C", new System.Globalization.CultureInfo("ru-RU"))</strong>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">—</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-page="Details" asp-route-id="@visit.Id" 
+                                           class="btn btn-outline-info" title="Просмотр">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-page="Edit" asp-route-id="@visit.Id" 
+                                           class="btn btn-outline-warning" title="Редактировать">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-outline-danger" 
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                                data-visit-id="@visit.Id" 
+                                                data-patient-name="@visit.Patient.FullName"
+                                                data-visit-date="@visit.VisitDateTime.ToString("dd.MM.yyyy HH:mm")"
+                                                title="Удалить">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-calendar-x text-muted" style="font-size: 4rem;"></i>
+                <h4 class="text-muted mt-3">Визиты не найдены</h4>
+                <p class="text-muted">
+                    @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.SelectedStatus.HasValue)
+                    {
+                        <span>Попробуйте изменить критерии поиска или </span>
+                        <a asp-page="Index" class="btn btn-link p-0">сбросить фильтры</a>
+                    }
+                    else
+                    {
+                        <span>Начните с </span>
+                        <a asp-page="Create" class="btn btn-link p-0">записи первого пациента на прием</a>
+                    }
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Подтверждение удаления
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы действительно хотите удалить визит?</p>
+                <div class="bg-light p-3 rounded">
+                    <div id="visitInfo">
+                        <!-- Will be filled by JavaScript -->
+                    </div>
+                </div>
+                <div class="alert alert-warning mt-3">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Внимание!</strong> Все связанные диагнозы и назначения также будут удалены.
+                    Это действие нельзя отменить.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <form method="post" asp-page-handler="Delete" class="d-inline">
+                    <input type="hidden" name="id" id="deleteVisitId">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>Удалить
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Handle delete modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteModal = document.getElementById('deleteModal');
+            
+            deleteModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const visitId = button.getAttribute('data-visit-id');
+                const patientName = button.getAttribute('data-patient-name');
+                const visitDate = button.getAttribute('data-visit-date');
+                
+                // Update modal content
+                document.getElementById('deleteVisitId').value = visitId;
+                document.getElementById('visitInfo').innerHTML = `
+                    <strong>Пациент:</strong> ${patientName}<br>
+                    <strong>Дата визита:</strong> ${visitDate}
+                `;
+            });
+        });
+    </script>
+} 

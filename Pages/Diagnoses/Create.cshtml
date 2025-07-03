@@ -1,0 +1,242 @@
+@page
+@model MedicalRegistration.Pages.Diagnoses.CreateModel
+@{
+    ViewData["Title"] = "Создать диагноз";
+}
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">
+                        <i class="fas fa-plus-circle text-success me-2"></i>
+                        Создать новый диагноз
+                    </h1>
+                    <p class="text-muted mt-1">Добавить диагноз к визиту пациента</p>
+                </div>
+                <a asp-page="./Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>
+                    Назад к списку
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-stethoscope me-2"></i>
+                        Информация о диагнозе
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row">
+                            <!-- Визит -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Diagnosis.VisitId" class="form-label required">Визит</label>
+                                <select asp-for="Diagnosis.VisitId" 
+                                        asp-items="Model.VisitsSelectList" 
+                                        class="form-select">
+                                    <option value="">Выберите визит...</option>
+                                </select>
+                                <span asp-validation-for="Diagnosis.VisitId" class="text-danger"></span>
+                            </div>
+
+                            <!-- Код МКБ-10 -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Diagnosis.IcdCode" class="form-label">Код МКБ-10</label>
+                                <input asp-for="Diagnosis.IcdCode" 
+                                       class="form-control" 
+                                       placeholder="Например: J06.9" 
+                                       maxlength="10" />
+                                <span asp-validation-for="Diagnosis.IcdCode" class="text-danger"></span>
+                                <div class="form-text">Международная классификация болезней</div>
+                            </div>
+
+                            <!-- Тип диагноза -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Diagnosis.Type" class="form-label required">Тип диагноза</label>
+                                <select asp-for="Diagnosis.Type" 
+                                        asp-items="Model.TypeSelectList" 
+                                        class="form-select">
+                                </select>
+                                <span asp-validation-for="Diagnosis.Type" class="text-danger"></span>
+                            </div>
+
+                            <!-- Название диагноза -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Diagnosis.Name" class="form-label required">Название диагноза</label>
+                                <input asp-for="Diagnosis.Name" 
+                                       class="form-control" 
+                                       placeholder="Введите название диагноза..." 
+                                       maxlength="500" />
+                                <span asp-validation-for="Diagnosis.Name" class="text-danger"></span>
+                            </div>
+
+                            <!-- Описание -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Diagnosis.Description" class="form-label">Описание диагноза</label>
+                                <textarea asp-for="Diagnosis.Description" 
+                                          class="form-control" 
+                                          rows="3" 
+                                          placeholder="Подробное описание диагноза..."
+                                          maxlength="2000"></textarea>
+                                <span asp-validation-for="Diagnosis.Description" class="text-danger"></span>
+                                <div class="form-text">Максимум 2000 символов</div>
+                            </div>
+
+                            <!-- Дата диагноза и степень тяжести -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Diagnosis.DiagnosisDate" class="form-label required">Дата установления диагноза</label>
+                                <input asp-for="Diagnosis.DiagnosisDate" 
+                                       type="datetime-local" 
+                                       class="form-control" />
+                                <span asp-validation-for="Diagnosis.DiagnosisDate" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Diagnosis.Severity" class="form-label">Степень тяжести</label>
+                                <select asp-for="Diagnosis.Severity" 
+                                        asp-items="Model.SeveritySelectList" 
+                                        class="form-select">
+                                    <option value="">Не указана</option>
+                                </select>
+                                <span asp-validation-for="Diagnosis.Severity" class="text-danger"></span>
+                            </div>
+
+                            <!-- Примечания -->
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Diagnosis.Notes" class="form-label">Примечания</label>
+                                <textarea asp-for="Diagnosis.Notes" 
+                                          class="form-control" 
+                                          rows="3" 
+                                          placeholder="Дополнительные примечания..."
+                                          maxlength="1000"></textarea>
+                                <span asp-validation-for="Diagnosis.Notes" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="./Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>
+                                Отмена
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-check me-1"></i>
+                                Создать диагноз
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Информация
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-lightbulb me-2"></i>
+                        <strong>Советы:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>Выберите соответствующий визит пациента</li>
+                            <li>Укажите код МКБ-10 если известен</li>
+                            <li>Заполните название диагноза</li>
+                            <li>Выберите тип и степень тяжести</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Diagnosis Types -->
+            <div class="card shadow">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="fas fa-list me-2"></i>
+                        Типы диагнозов
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="small">
+                        <div class="mb-2">
+                            <span class="badge bg-danger me-2">Основной</span>
+                            Главное заболевание
+                        </div>
+                        <div class="mb-2">
+                            <span class="badge bg-warning me-2">Сопутствующий</span>
+                            Дополнительные болезни
+                        </div>
+                        <div class="mb-2">
+                            <span class="badge bg-success me-2">Предварительный</span>
+                            Первичная оценка
+                        </div>
+                        <div class="mb-0">
+                            <span class="badge bg-info me-2">Дифференциальный</span>
+                            Альтернативные варианты
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.required:after {
+    content: " *";
+    color: red;
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    border-bottom: none;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn {
+    border-radius: 0.5rem;
+}
+
+.alert {
+    border-radius: 0.5rem;
+}
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-format ICD code input
+            const icdInput = document.querySelector('input[name="Diagnosis.IcdCode"]');
+            if (icdInput) {
+                icdInput.addEventListener('input', function(e) {
+                    // Convert to uppercase for ICD codes
+                    e.target.value = e.target.value.toUpperCase();
+                });
+            }
+        });
+    </script>
+} 

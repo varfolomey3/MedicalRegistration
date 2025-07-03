@@ -1,0 +1,269 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MedicalRegistration.Models
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Медицинская регистрация</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MedicalRegistration.styles.css" asp-append-version="true" />
+</head>
+<body class="d-flex flex-column min-vh-100">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+            <div class="container">
+                <a class="navbar-brand fw-bold" asp-area="" asp-page="/Index">
+                    <i class="bi bi-hospital me-2"></i>
+                    Медицинская система
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Переключить навигацию">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-page="/Index">
+                                <i class="bi bi-house-door me-1"></i>Главная
+                            </a>
+                        </li>
+
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            @if (User.IsInRole(UserRoles.Doctor))
+                            {
+                                <!-- Меню для врачей - полный доступ -->
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-people me-1"></i>Пациенты
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Patients/Index">
+                                            <i class="bi bi-list-ul me-2"></i>Список пациентов
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Patients/Create">
+                                            <i class="bi bi-person-plus me-2"></i>Добавить пациента
+                                        </a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-calendar-check me-1"></i>Визиты
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Visits/Index">
+                                            <i class="bi bi-list-ul me-2"></i>Список визитов
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Visits/Create">
+                                            <i class="bi bi-plus-circle me-2"></i>Записать на прием
+                                        </a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-clipboard-pulse me-1"></i>Диагнозы
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Diagnoses/Index">
+                                            <i class="bi bi-list-ul me-2"></i>Список диагнозов
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Diagnoses/Create">
+                                            <i class="bi bi-plus-circle me-2"></i>Добавить диагноз
+                                        </a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-prescription2 me-1"></i>Назначения
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Prescriptions/Index">
+                                            <i class="bi bi-list-ul me-2"></i>Список назначений
+                                        </a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Prescriptions/Create">
+                                            <i class="bi bi-plus-circle me-2"></i>Создать назначение
+                                        </a></li>
+                                    </ul>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" onclick="alert('Функция в разработке')">
+                                        <i class="bi bi-clipboard-data me-1"></i>Отчеты
+                                    </a>
+                                </li>
+                            }
+                            else if (User.IsInRole(UserRoles.Patient))
+                            {
+                                <!-- Меню для пациентов - ограниченный доступ -->
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Visits/Create">
+                                        <i class="bi bi-calendar-plus me-1"></i>Записаться на прием
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" onclick="alert('Функция в разработке')">
+                                        <i class="bi bi-journal-medical me-1"></i>Моя история болезни
+                                    </a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
+                            <!-- Публичное меню для неавторизованных -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" onclick="alert('Для доступа к функциям системы необходимо войти в аккаунт')">
+                                    <i class="bi bi-info-circle me-1"></i>О системе
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                    
+                    <!-- Правая часть навигации -->
+                    <ul class="navbar-nav">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            var currentUser = await UserManager.GetUserAsync(User);
+                            var userTypeIcon = currentUser?.IsDoctor == true ? "bi-hospital" : "bi-person-heart";
+                            var userTypeText = currentUser?.IsDoctor == true ? "Врач" : "Пациент";
+                            
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="@userTypeIcon me-2"></i>
+                                    <span class="d-none d-md-inline">@currentUser?.FullName</span>
+                                    <span class="d-md-none">Профиль</span>
+                                    <span class="badge bg-secondary ms-2">@userTypeText</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><h6 class="dropdown-header">@currentUser?.FullName</h6></li>
+                                    <li><span class="dropdown-item-text small text-muted">@currentUser?.Email</span></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#" onclick="alert('Функция в разработке')">
+                                        <i class="bi bi-person-gear me-2"></i>Профиль
+                                    </a></li>
+                                    <li><a class="dropdown-item" href="#" onclick="alert('Функция в разработке')">
+                                        <i class="bi bi-gear me-2"></i>Настройки
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form method="post" asp-page="/Account/Logout" class="d-inline">
+                                            <button type="submit" class="dropdown-item text-danger">
+                                                <i class="bi bi-box-arrow-right me-2"></i>Выйти
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="/Account/Login">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>Вход
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-outline-light btn-sm ms-2" asp-area="" asp-page="/Account/Register">
+                                    <i class="bi bi-person-plus me-1"></i>Регистрация
+                                </a>
+                            </li>
+                        }
+                        
+                        @if (!SignInManager.IsSignedIn(User) || User.IsInRole(UserRoles.Doctor))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="/Privacy">
+                                    <i class="bi bi-shield-lock me-1"></i>Конфиденциальность
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="flex-grow-1">
+        <div class="container-fluid px-4 py-3">
+            <!-- Breadcrumb navigation -->
+            @if (ViewData["Breadcrumb"] != null)
+            {
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb">
+                        @Html.Raw(ViewData["Breadcrumb"])
+                    </ol>
+                </nav>
+            }
+            
+            <!-- Alert messages -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>
+                    @TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-circle me-2"></i>
+                    @TempData["ErrorMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                </div>
+            }
+            @if (TempData["InfoMessage"] != null)
+            {
+                <div class="alert alert-info alert-dismissible fade show" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>
+                    @TempData["InfoMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                </div>
+            }
+            @if (TempData["WarningMessage"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    @TempData["WarningMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                </div>
+            }
+
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="bg-light border-top mt-auto">
+        <div class="container-fluid px-4 py-3">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <span class="text-muted">
+                        <i class="bi bi-c-circle me-1"></i>
+                        2025 - Медицинская система регистрации и истории болезни
+                    </span>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <small class="text-muted">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Соответствует требованиям безопасности медицинских данных
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

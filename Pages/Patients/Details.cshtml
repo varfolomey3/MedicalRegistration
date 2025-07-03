@@ -1,0 +1,334 @@
+@page
+@model MedicalRegistration.Pages.Patients.DetailsModel
+@{
+    ViewData["Title"] = $"Пациент: {Model.Patient.FullName}";
+    ViewData["Breadcrumb"] = $"<li class=\"breadcrumb-item\"><a href=\"/\">Главная</a></li><li class=\"breadcrumb-item\"><a href=\"/Patients\">Пациенты</a></li><li class=\"breadcrumb-item active\">{Model.Patient.FullName}</li>";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="bi bi-person-circle text-primary me-2"></i>
+        @Model.Patient.FullName
+    </h1>
+    <div>
+        <a asp-page="Edit" asp-route-id="@Model.Patient.Id" class="btn btn-warning">
+            <i class="bi bi-pencil me-1"></i>
+            Редактировать
+        </a>
+        <a asp-page="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>
+            Назад к списку
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Patient Information -->
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-person-badge me-2"></i>
+                    Личная информация
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-5 fw-medium">
+                        <i class="bi bi-hash text-muted me-1"></i>
+                        Мед. карта:
+                    </div>
+                    <div class="col-sm-7">
+                        <span class="badge bg-secondary fs-6">@Model.Patient.MedicalCardNumber</span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-5 fw-medium">
+                        <i class="bi bi-person text-muted me-1"></i>
+                        ФИО:
+                    </div>
+                    <div class="col-sm-7">
+                        @Model.Patient.FullName
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-5 fw-medium">
+                        <i class="bi bi-calendar text-muted me-1"></i>
+                        Дата рождения:
+                    </div>
+                    <div class="col-sm-7">
+                        @Model.Patient.DateOfBirth.ToString("dd.MM.yyyy")
+                        <br>
+                        <small class="text-muted">
+                            <span class="badge bg-info">@Model.Patient.Age лет</span>
+                        </small>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-sm-5 fw-medium">
+                        <i class="bi bi-gender-ambiguous text-muted me-1"></i>
+                        Пол:
+                    </div>
+                    <div class="col-sm-7">
+                        @if (Model.Patient.Gender == MedicalRegistration.Models.Gender.Male)
+                        {
+                            <span class="badge bg-primary">
+                                <i class="bi bi-gender-male me-1"></i>Мужской
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">
+                                <i class="bi bi-gender-female me-1"></i>Женский
+                            </span>
+                        }
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Patient.PhoneNumber))
+                {
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-medium">
+                            <i class="bi bi-telephone text-muted me-1"></i>
+                            Телефон:
+                        </div>
+                        <div class="col-sm-7">
+                            <a href="tel:@Model.Patient.PhoneNumber" class="text-decoration-none">
+                                @Model.Patient.PhoneNumber
+                            </a>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Patient.Email))
+                {
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-medium">
+                            <i class="bi bi-envelope text-muted me-1"></i>
+                            Email:
+                        </div>
+                        <div class="col-sm-7">
+                            <a href="mailto:@Model.Patient.Email" class="text-decoration-none">
+                                @Model.Patient.Email
+                            </a>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(Model.Patient.Address))
+                {
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-medium">
+                            <i class="bi bi-geo-alt text-muted me-1"></i>
+                            Адрес:
+                        </div>
+                        <div class="col-sm-7">
+                            @Model.Patient.Address
+                        </div>
+                    </div>
+                }
+
+                <hr>
+
+                <div class="row mb-2">
+                    <div class="col-sm-5 fw-medium">
+                        <i class="bi bi-calendar-plus text-muted me-1"></i>
+                        Создан:
+                    </div>
+                    <div class="col-sm-7">
+                        <small class="text-muted">
+                            @Model.Patient.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                        </small>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-5 fw-medium">
+                        <i class="bi bi-calendar-check text-muted me-1"></i>
+                        Обновлен:
+                    </div>
+                    <div class="col-sm-7">
+                        <small class="text-muted">
+                            @Model.Patient.UpdatedAt.ToString("dd.MM.yyyy HH:mm")
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-lightning me-2"></i>
+                    Быстрые действия
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/Visits/Create?patientId=@Model.Patient.Id" class="btn btn-primary">
+                        <i class="bi bi-calendar-plus me-1"></i>
+                        Записать на прием
+                    </a>
+                    <a href="/Diagnoses/Create?patientId=@Model.Patient.Id" class="btn btn-outline-info">
+                        <i class="bi bi-file-medical me-1"></i>
+                        Добавить диагноз
+                    </a>
+                    <a href="/Prescriptions/Create?patientId=@Model.Patient.Id" class="btn btn-outline-warning">
+                        <i class="bi bi-prescription2 me-1"></i>
+                        Выписать рецепт
+                    </a>
+                </div>
+                <div class="text-center mt-2">
+                    <small class="text-muted">
+                        <i class="bi bi-check-circle me-1"></i>
+                        Все функции активны и готовы к использованию
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Medical History -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-light">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-journal-medical me-2"></i>
+                        Медицинская история
+                    </h5>
+                    <span class="badge bg-primary">
+                        Визитов: @Model.Patient.Visits.Count()
+                    </span>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (Model.Patient.Visits.Any())
+                {
+                    <div class="timeline">
+                        @foreach (var visit in Model.Patient.Visits.OrderByDescending(v => v.VisitDateTime))
+                        {
+                            <div class="timeline-item mb-4">
+                                <div class="card border-start border-primary border-3">
+                                    <div class="card-header bg-light">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="mb-1">
+                                                    <i class="bi bi-calendar-event me-1"></i>
+                                                    @visit.VisitDateTime.ToString("dd.MM.yyyy HH:mm")
+                                                </h6>
+                                                <small class="text-muted">
+                                                    @visit.DoctorName (@visit.Specialty)
+                                                </small>
+                                            </div>
+                                            @{
+                                                var statusClass = visit.Status switch 
+                                                {
+                                                    MedicalRegistration.Models.VisitStatus.Completed => "bg-success",
+                                                    MedicalRegistration.Models.VisitStatus.InProgress => "bg-warning",
+                                                    MedicalRegistration.Models.VisitStatus.Scheduled => "bg-info",
+                                                    MedicalRegistration.Models.VisitStatus.Cancelled => "bg-danger",
+                                                    MedicalRegistration.Models.VisitStatus.NoShow => "bg-secondary",
+                                                    _ => "bg-secondary"
+                                                };
+                                                var statusText = visit.Status switch
+                                                {
+                                                    MedicalRegistration.Models.VisitStatus.Completed => "Завершен",
+                                                    MedicalRegistration.Models.VisitStatus.InProgress => "В процессе",
+                                                    MedicalRegistration.Models.VisitStatus.Scheduled => "Запланирован",
+                                                    MedicalRegistration.Models.VisitStatus.Cancelled => "Отменен",
+                                                    MedicalRegistration.Models.VisitStatus.NoShow => "Не явился",
+                                                    _ => "Неизвестно"
+                                                };
+                                            }
+                                            <span class="badge @statusClass">@statusText</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        @if (!string.IsNullOrEmpty(visit.Complaints))
+                                        {
+                                            <p class="mb-2">
+                                                <strong>Жалобы:</strong> @visit.Complaints
+                                            </p>
+                                        }
+                                        
+                                        @if (!string.IsNullOrEmpty(visit.Examination))
+                                        {
+                                            <p class="mb-2">
+                                                <strong>Осмотр:</strong> @visit.Examination
+                                            </p>
+                                        }
+
+                                        @if (visit.Diagnoses.Any())
+                                        {
+                                            <div class="mb-2">
+                                                <strong>Диагнозы:</strong>
+                                                <div class="ms-3">
+                                                    @foreach (var diagnosis in visit.Diagnoses)
+                                                    {
+                                                        <div class="badge bg-info me-1 mb-1">
+                                                            @if (!string.IsNullOrEmpty(diagnosis.IcdCode))
+                                                            {
+                                                                <span>@diagnosis.IcdCode:</span>
+                                                            }
+                                                            @diagnosis.Name
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (visit.Prescriptions.Any())
+                                        {
+                                            <div class="mb-2">
+                                                <strong>Назначения:</strong>
+                                                <div class="ms-3">
+                                                    @foreach (var prescription in visit.Prescriptions)
+                                                    {
+                                                        <div class="badge bg-warning text-dark me-1 mb-1">
+                                                            @prescription.Name
+                                                            @if (!string.IsNullOrEmpty(prescription.Dosage))
+                                                            {
+                                                                <span>(@prescription.Dosage)</span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+
+                                        @if (visit.Cost.HasValue)
+                                        {
+                                            <p class="mb-0">
+                                                <strong>Стоимость:</strong> 
+                                                <span class="badge bg-success">@visit.Cost.Value.ToString("C", new System.Globalization.CultureInfo("ru-RU"))</span>
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-journal-x display-1 text-muted mb-3"></i>
+                        <h5 class="text-muted mb-3">Медицинская история пуста</h5>
+                        <p class="text-muted mb-4">
+                            У пациента пока нет записей о визитах к врачу.
+                        </p>
+                        <a href="/Visits/Create?patientId=@Model.Patient.Id" class="btn btn-primary">
+                            <i class="bi bi-calendar-plus me-1"></i>
+                            Записать на первый прием
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div> 

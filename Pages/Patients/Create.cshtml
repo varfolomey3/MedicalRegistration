@@ -1,0 +1,244 @@
+@page
+@model MedicalRegistration.Pages.Patients.CreateModel
+@{
+    ViewData["Title"] = "Добавить пациента";
+    ViewData["Breadcrumb"] = "<li class=\"breadcrumb-item\"><a href=\"/\">Главная</a></li><li class=\"breadcrumb-item\"><a href=\"/Patients\">Пациенты</a></li><li class=\"breadcrumb-item active\">Добавить</li>";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="bi bi-person-plus text-success me-2"></i>
+        Добавить нового пациента
+    </h1>
+    <a asp-page="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>
+        Назад к списку
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="bi bi-form me-2"></i>
+                    Основная информация
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    
+                    <!-- Personal Information -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label asp-for="Patient.LastName" class="form-label required">
+                                <i class="bi bi-person me-1"></i>Фамилия
+                            </label>
+                            <input asp-for="Patient.LastName" class="form-control" placeholder="Введите фамилию">
+                            <span asp-validation-for="Patient.LastName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Patient.FirstName" class="form-label required">
+                                <i class="bi bi-person me-1"></i>Имя
+                            </label>
+                            <input asp-for="Patient.FirstName" class="form-control" placeholder="Введите имя">
+                            <span asp-validation-for="Patient.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Patient.MiddleName" class="form-label">
+                                <i class="bi bi-person me-1"></i>Отчество
+                            </label>
+                            <input asp-for="Patient.MiddleName" class="form-control" placeholder="Введите отчество (необязательно)">
+                            <span asp-validation-for="Patient.MiddleName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Birth Date and Gender -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Patient.DateOfBirth" class="form-label required">
+                                <i class="bi bi-calendar me-1"></i>Дата рождения
+                            </label>
+                            <input asp-for="Patient.DateOfBirth" class="form-control" type="date">
+                            <span asp-validation-for="Patient.DateOfBirth" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Patient.Gender" class="form-label required">
+                                <i class="bi bi-gender-ambiguous me-1"></i>Пол
+                            </label>
+                            <select asp-for="Patient.Gender" class="form-select">
+                                <option value="">Выберите пол</option>
+                                <option value="1">Мужской</option>
+                                <option value="2">Женский</option>
+                            </select>
+                            <span asp-validation-for="Patient.Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Medical Card Number -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Patient.MedicalCardNumber" class="form-label required">
+                                <i class="bi bi-hash me-1"></i>Номер медицинской карты
+                            </label>
+                            <input asp-for="Patient.MedicalCardNumber" class="form-control" placeholder="Введите номер медицинской карты">
+                            <div class="form-text">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Номер должен быть уникальным в системе
+                            </div>
+                            <span asp-validation-for="Patient.MedicalCardNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Contact Information -->
+                    <h6 class="text-muted mb-3">
+                        <i class="bi bi-telephone me-2"></i>
+                        Контактная информация
+                    </h6>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Patient.PhoneNumber" class="form-label">
+                                <i class="bi bi-telephone me-1"></i>Номер телефона
+                            </label>
+                            <input asp-for="Patient.PhoneNumber" class="form-control" placeholder="+7 (999) 123-45-67">
+                            <span asp-validation-for="Patient.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Patient.Email" class="form-label">
+                                <i class="bi bi-envelope me-1"></i>Email адрес
+                            </label>
+                            <input asp-for="Patient.Email" class="form-control" type="email" placeholder="example@email.com">
+                            <span asp-validation-for="Patient.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Patient.Address" class="form-label">
+                            <i class="bi bi-geo-alt me-1"></i>Адрес проживания
+                        </label>
+                        <textarea asp-for="Patient.Address" class="form-control" rows="2" 
+                                  placeholder="Введите полный адрес проживания"></textarea>
+                        <span asp-validation-for="Patient.Address" class="text-danger"></span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <a asp-page="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-1"></i>
+                            Отмена
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-check-circle me-1"></i>
+                            Создать пациента
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Информация
+                </h6>
+            </div>
+            <div class="card-body">
+                <h6>Обязательные поля</h6>
+                <ul class="list-unstyled mb-3">
+                    <li><i class="bi bi-check-circle text-success me-1"></i> Фамилия</li>
+                    <li><i class="bi bi-check-circle text-success me-1"></i> Имя</li>
+                    <li><i class="bi bi-check-circle text-success me-1"></i> Дата рождения</li>
+                    <li><i class="bi bi-check-circle text-success me-1"></i> Пол</li>
+                    <li><i class="bi bi-check-circle text-success me-1"></i> Номер мед. карты</li>
+                </ul>
+
+                <h6>Дополнительные поля</h6>
+                <ul class="list-unstyled mb-3">
+                    <li><i class="bi bi-circle text-muted me-1"></i> Отчество</li>
+                    <li><i class="bi bi-circle text-muted me-1"></i> Телефон</li>
+                    <li><i class="bi bi-circle text-muted me-1"></i> Email</li>
+                    <li><i class="bi bi-circle text-muted me-1"></i> Адрес</li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Внимание!</strong><br>
+                    Номер медицинской карты должен быть уникальным. 
+                    Проверьте, что такой номер еще не используется в системе.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Auto-format phone number
+        document.querySelector('input[name="Patient.PhoneNumber"]')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            // Ограничиваем длину номера
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
+            // Убираем начальную 8, заменяем на 7
+            if (value.startsWith('8')) {
+                value = '7' + value.substring(1);
+            }
+            
+            // Форматируем номер
+            if (value.length === 0) {
+                e.target.value = '';
+            } else if (value.length === 1 && value === '7') {
+                e.target.value = '+7 ';
+            } else if (value.startsWith('7')) {
+                const digits = value.substring(1);
+                if (digits.length <= 3) {
+                    e.target.value = `+7 (${digits}`;
+                } else if (digits.length <= 6) {
+                    e.target.value = `+7 (${digits.substring(0, 3)}) ${digits.substring(3)}`;
+                } else if (digits.length <= 8) {
+                    e.target.value = `+7 (${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6)}`;
+                } else {
+                    e.target.value = `+7 (${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6, 8)}-${digits.substring(8)}`;
+                }
+            } else {
+                // Для номеров не начинающихся с 7
+                if (value.length <= 3) {
+                    e.target.value = `+7 (${value}`;
+                } else if (value.length <= 6) {
+                    e.target.value = `+7 (${value.substring(0, 3)}) ${value.substring(3)}`;
+                } else if (value.length <= 8) {
+                    e.target.value = `+7 (${value.substring(0, 3)}) ${value.substring(3, 6)}-${value.substring(6)}`;
+                } else {
+                    e.target.value = `+7 (${value.substring(0, 3)}) ${value.substring(3, 6)}-${value.substring(6, 8)}-${value.substring(8)}`;
+                }
+            }
+        });
+
+        // Set max date for birth date to today
+        document.querySelector('input[name="Patient.DateOfBirth"]').max = new Date().toISOString().split('T')[0];
+        
+        // Set min date for birth date (150 years ago)
+        const minDate = new Date();
+        minDate.setFullYear(minDate.getFullYear() - 150);
+        document.querySelector('input[name="Patient.DateOfBirth"]').min = minDate.toISOString().split('T')[0];
+    </script>
+}
+
+<style>
+    .required::after {
+        content: " *";
+        color: red;
+    }
+</style> 

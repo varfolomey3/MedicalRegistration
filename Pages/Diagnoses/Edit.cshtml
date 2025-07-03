@@ -1,0 +1,242 @@
+@page
+@model MedicalRegistration.Pages.Diagnoses.EditModel
+@{
+    ViewData["Title"] = "Редактировать диагноз";
+}
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">
+                        <i class="bi bi-pencil-square text-warning me-2"></i>
+                        Редактировать диагноз
+                    </h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb mb-0">
+                            <li class="breadcrumb-item"><a asp-page="/Index">Главная</a></li>
+                            <li class="breadcrumb-item"><a asp-page="./Index">Диагнозы</a></li>
+                            <li class="breadcrumb-item"><a asp-page="./Details" asp-route-id="@Model.Diagnosis.Id">@Model.Diagnosis.Name</a></li>
+                            <li class="breadcrumb-item active">Редактирование</li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="btn-group">
+                    <a asp-page="./Details" asp-route-id="@Model.Diagnosis.Id" class="btn btn-outline-info">
+                        <i class="bi bi-eye me-1"></i>
+                        Просмотр
+                    </a>
+                    <a asp-page="./Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left me-1"></i>
+                        Назад к списку
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-pencil me-2"></i>
+                        Информация о диагнозе
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <input asp-for="Diagnosis.Id" type="hidden" />
+                        <input asp-for="Diagnosis.CreatedAt" type="hidden" />
+                        
+                        <div class="row">
+                            <!-- Визит -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Diagnosis.VisitId" class="form-label required">Визит</label>
+                                <select asp-for="Diagnosis.VisitId" 
+                                        asp-items="Model.VisitsSelectList" 
+                                        class="form-select">
+                                    <option value="">Выберите визит...</option>
+                                </select>
+                                <span asp-validation-for="Diagnosis.VisitId" class="text-danger"></span>
+                            </div>
+
+                            <!-- Тип диагноза -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Diagnosis.Type" class="form-label required">Тип диагноза</label>
+                                <select asp-for="Diagnosis.Type" 
+                                        asp-items="Model.TypeSelectList" 
+                                        class="form-select">
+                                </select>
+                                <span asp-validation-for="Diagnosis.Type" class="text-danger"></span>
+                            </div>
+
+                            <!-- Степень тяжести -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Diagnosis.Severity" class="form-label">Степень тяжести</label>
+                                <select asp-for="Diagnosis.Severity" 
+                                        asp-items="Model.SeveritySelectList" 
+                                        class="form-select">
+                                </select>
+                                <span asp-validation-for="Diagnosis.Severity" class="text-danger"></span>
+                            </div>
+
+                            <!-- Код МКБ-10 -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Diagnosis.IcdCode" class="form-label">Код МКБ-10</label>
+                                <input asp-for="Diagnosis.IcdCode" 
+                                       class="form-control" 
+                                       placeholder="Например: J06.9" 
+                                       maxlength="10" />
+                                <span asp-validation-for="Diagnosis.IcdCode" class="text-danger"></span>
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Код по Международной классификации болезней 10-го пересмотра
+                                </div>
+                            </div>
+
+                            <!-- Дата диагноза -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Diagnosis.DiagnosisDate" class="form-label required">Дата диагноза</label>
+                                <input asp-for="Diagnosis.DiagnosisDate" 
+                                       type="datetime-local" 
+                                       class="form-control" />
+                                <span asp-validation-for="Diagnosis.DiagnosisDate" class="text-danger"></span>
+                            </div>
+
+                            <!-- Название диагноза -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Diagnosis.Name" class="form-label required">Название диагноза</label>
+                                <input asp-for="Diagnosis.Name" 
+                                       class="form-control" 
+                                       placeholder="Введите название диагноза..." 
+                                       maxlength="500" />
+                                <span asp-validation-for="Diagnosis.Name" class="text-danger"></span>
+                            </div>
+
+                            <!-- Описание -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Diagnosis.Description" class="form-label">Описание диагноза</label>
+                                <textarea asp-for="Diagnosis.Description" 
+                                          class="form-control" 
+                                          rows="4" 
+                                          placeholder="Подробное описание диагноза, симптомы, характеристики..."
+                                          maxlength="2000"></textarea>
+                                <span asp-validation-for="Diagnosis.Description" class="text-danger"></span>
+                                <div class="form-text">
+                                    Максимум 2000 символов
+                                </div>
+                            </div>
+
+                            <!-- Примечания -->
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Diagnosis.Notes" class="form-label">Примечания</label>
+                                <textarea asp-for="Diagnosis.Notes" 
+                                          class="form-control" 
+                                          rows="3" 
+                                          placeholder="Дополнительные примечания, комментарии..."
+                                          maxlength="1000"></textarea>
+                                <span asp-validation-for="Diagnosis.Notes" class="text-danger"></span>
+                                <div class="form-text">
+                                    Максимум 1000 символов
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="./Details" asp-route-id="@Model.Diagnosis.Id" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>
+                                Отмена
+                            </a>
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-check me-1"></i>
+                                Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Current Values -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Текущие значения
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="small">
+                        <div class="mb-2">
+                            <strong>ID диагноза:</strong><br>
+                            <code>@Model.Diagnosis.Id</code>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Пациент:</strong><br>
+                            @Model.Diagnosis.Visit?.Patient?.FullName
+                        </div>
+                        <div class="mb-2">
+                            <strong>Дата визита:</strong><br>
+                            @Model.Diagnosis.Visit?.VisitDateTime.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+                        <div class="mb-2">
+                            <strong>Создано:</strong><br>
+                            @Model.Diagnosis.CreatedAt.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+                        <div>
+                            <strong>Последнее изменение:</strong><br>
+                            @Model.Diagnosis.UpdatedAt.ToString("dd.MM.yyyy HH:mm")
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help -->
+            <div class="card shadow">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-question-circle me-2"></i>
+                        Справка
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="small">
+                        <div class="mb-3">
+                            <strong>Типы диагнозов:</strong>
+                            <ul class="mt-1 mb-0">
+                                <li><strong>Основной</strong> - главный диагноз визита</li>
+                                <li><strong>Сопутствующий</strong> - дополнительные заболевания</li>
+                                <li><strong>Предварительный</strong> - требует подтверждения</li>
+                                <li><strong>Дифференциальный</strong> - один из возможных</li>
+                            </ul>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Степени тяжести:</strong>
+                            <ul class="mt-1 mb-0">
+                                <li><span class="text-success">Легкая</span> - минимальное влияние</li>
+                                <li><span class="text-warning">Средняя</span> - умеренное течение</li>
+                                <li><span class="text-danger">Тяжелая</span> - серьезное состояние</li>
+                                <li><span class="text-danger">Критическая</span> - угрожающее жизни</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <strong>Коды МКБ-10:</strong><br>
+                            Используйте официальные коды международной классификации болезней для стандартизации диагнозов.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

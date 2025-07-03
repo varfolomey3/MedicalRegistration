@@ -1,0 +1,324 @@
+@page
+@model MedicalRegistration.Pages.Patients.EditModel
+@{
+    ViewData["Title"] = $"Редактировать: {Model.Patient.FullName}";
+    ViewData["Breadcrumb"] = $"<li class=\"breadcrumb-item\"><a href=\"/\">Главная</a></li><li class=\"breadcrumb-item\"><a href=\"/Patients\">Пациенты</a></li><li class=\"breadcrumb-item\"><a href=\"/Patients/Details/{Model.Patient.Id}\">{Model.Patient.FullName}</a></li><li class=\"breadcrumb-item active\">Редактировать</li>";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="bi bi-pencil-square text-warning me-2"></i>
+        Редактировать пациента
+    </h1>
+    <div>
+        <a asp-page="Details" asp-route-id="@Model.Patient.Id" class="btn btn-outline-info">
+            <i class="bi bi-eye me-1"></i>
+            Просмотр
+        </a>
+        <a asp-page="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>
+            Назад к списку
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0">
+                    <i class="bi bi-form me-2"></i>
+                    Редактирование информации о пациенте
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <input type="hidden" asp-for="Patient.Id" />
+                    <input type="hidden" asp-for="Patient.CreatedAt" />
+                    
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    
+                    <!-- Personal Information -->
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label asp-for="Patient.LastName" class="form-label required">
+                                <i class="bi bi-person me-1"></i>Фамилия
+                            </label>
+                            <input asp-for="Patient.LastName" class="form-control" placeholder="Введите фамилию">
+                            <span asp-validation-for="Patient.LastName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Patient.FirstName" class="form-label required">
+                                <i class="bi bi-person me-1"></i>Имя
+                            </label>
+                            <input asp-for="Patient.FirstName" class="form-control" placeholder="Введите имя">
+                            <span asp-validation-for="Patient.FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Patient.MiddleName" class="form-label">
+                                <i class="bi bi-person me-1"></i>Отчество
+                            </label>
+                            <input asp-for="Patient.MiddleName" class="form-control" placeholder="Введите отчество (необязательно)">
+                            <span asp-validation-for="Patient.MiddleName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Birth Date and Gender -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Patient.DateOfBirth" class="form-label required">
+                                <i class="bi bi-calendar me-1"></i>Дата рождения
+                            </label>
+                            <input asp-for="Patient.DateOfBirth" class="form-control" type="date">
+                            <span asp-validation-for="Patient.DateOfBirth" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Patient.Gender" class="form-label required">
+                                <i class="bi bi-gender-ambiguous me-1"></i>Пол
+                            </label>
+                            <select asp-for="Patient.Gender" class="form-select">
+                                <option value="">Выберите пол</option>
+                                <option value="1">Мужской</option>
+                                <option value="2">Женский</option>
+                            </select>
+                            <span asp-validation-for="Patient.Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- Medical Card Number -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Patient.MedicalCardNumber" class="form-label required">
+                                <i class="bi bi-hash me-1"></i>Номер медицинской карты
+                            </label>
+                            <input asp-for="Patient.MedicalCardNumber" class="form-control" placeholder="Введите номер медицинской карты">
+                            <div class="form-text">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Номер должен быть уникальным в системе
+                            </div>
+                            <span asp-validation-for="Patient.MedicalCardNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <!-- Contact Information -->
+                    <h6 class="text-muted mb-3">
+                        <i class="bi bi-telephone me-2"></i>
+                        Контактная информация
+                    </h6>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label asp-for="Patient.PhoneNumber" class="form-label">
+                                <i class="bi bi-telephone me-1"></i>Номер телефона
+                            </label>
+                            <input asp-for="Patient.PhoneNumber" class="form-control" placeholder="+7 (999) 123-45-67">
+                            <span asp-validation-for="Patient.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Patient.Email" class="form-label">
+                                <i class="bi bi-envelope me-1"></i>Email адрес
+                            </label>
+                            <input asp-for="Patient.Email" class="form-control" type="email" placeholder="example@email.com">
+                            <span asp-validation-for="Patient.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Patient.Address" class="form-label">
+                            <i class="bi bi-geo-alt me-1"></i>Адрес проживания
+                        </label>
+                        <textarea asp-for="Patient.Address" class="form-control" rows="2" 
+                                  placeholder="Введите полный адрес проживания"></textarea>
+                        <span asp-validation-for="Patient.Address" class="text-danger"></span>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex justify-content-between">
+                        <a asp-page="Details" asp-route-id="@Model.Patient.Id" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle me-1"></i>
+                            Отмена
+                        </a>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-check-circle me-1"></i>
+                            Сохранить изменения
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="col-lg-4">
+        <!-- Current Info -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Текущая информация
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-2">
+                    <small class="text-muted">Создан:</small><br>
+                    <strong>@Model.Patient.CreatedAt.ToString("dd.MM.yyyy HH:mm")</strong>
+                </div>
+                <div class="mb-3">
+                    <small class="text-muted">Последнее изменение:</small><br>
+                    <strong>@Model.Patient.UpdatedAt.ToString("dd.MM.yyyy HH:mm")</strong>
+                </div>
+                <div class="mb-3">
+                    <small class="text-muted">Количество визитов:</small><br>
+                    <span class="badge bg-primary">@Model.Patient.Visits.Count()</span>
+                </div>
+                
+                @if (Model.Patient.Visits.Any())
+                {
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Внимание!</strong><br>
+                        У пациента есть медицинская история. 
+                        Изменения основных данных могут повлиять на связанные записи.
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0">
+                    <i class="bi bi-lightning me-2"></i>
+                    Быстрые действия
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-page="Details" asp-route-id="@Model.Patient.Id" class="btn btn-outline-info btn-sm">
+                        <i class="bi bi-eye me-1"></i>
+                        Просмотр деталей
+                    </a>
+                    <button class="btn btn-outline-primary btn-sm" disabled>
+                        <i class="bi bi-calendar-plus me-1"></i>
+                        Записать на прием
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm" 
+                            data-bs-toggle="modal" data-bs-target="#deleteModal">
+                        <i class="bi bi-trash me-1"></i>
+                        Удалить пациента
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    Подтверждение удаления
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы действительно хотите удалить пациента?</p>
+                <div class="bg-light p-3 rounded">
+                    <strong>@Model.Patient.FullName</strong><br>
+                    <small class="text-muted">Мед. карта: @Model.Patient.MedicalCardNumber</small>
+                </div>
+                @if (Model.Patient.Visits.Any())
+                {
+                    <div class="alert alert-danger mt-3 mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Внимание!</strong> У пациента есть медицинская история (@Model.Patient.Visits.Count() визитов). 
+                        Все связанные данные будут также удалены.
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning mt-3 mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Внимание!</strong> Это действие нельзя отменить.
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <form method="post" asp-page-handler="Delete" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>Удалить
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Auto-format phone number (same as create page)
+        document.querySelector('input[name="Patient.PhoneNumber"]')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
+            if (value.startsWith('8')) {
+                value = '7' + value.substring(1);
+            }
+            
+            if (value.length === 0) {
+                e.target.value = '';
+            } else if (value.length === 1 && value === '7') {
+                e.target.value = '+7 ';
+            } else if (value.startsWith('7')) {
+                const digits = value.substring(1);
+                if (digits.length <= 3) {
+                    e.target.value = `+7 (${digits}`;
+                } else if (digits.length <= 6) {
+                    e.target.value = `+7 (${digits.substring(0, 3)}) ${digits.substring(3)}`;
+                } else if (digits.length <= 8) {
+                    e.target.value = `+7 (${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6)}`;
+                } else {
+                    e.target.value = `+7 (${digits.substring(0, 3)}) ${digits.substring(3, 6)}-${digits.substring(6, 8)}-${digits.substring(8)}`;
+                }
+            } else {
+                if (value.length <= 3) {
+                    e.target.value = `+7 (${value}`;
+                } else if (value.length <= 6) {
+                    e.target.value = `+7 (${value.substring(0, 3)}) ${value.substring(3)}`;
+                } else if (value.length <= 8) {
+                    e.target.value = `+7 (${value.substring(0, 3)}) ${value.substring(3, 6)}-${value.substring(6)}`;
+                } else {
+                    e.target.value = `+7 (${value.substring(0, 3)}) ${value.substring(3, 6)}-${value.substring(6, 8)}-${value.substring(8)}`;
+                }
+            }
+        });
+
+        // Set date limits
+        const today = new Date().toISOString().split('T')[0];
+        const minDate = new Date();
+        minDate.setFullYear(minDate.getFullYear() - 150);
+        
+        const birthDateInput = document.querySelector('input[name="Patient.DateOfBirth"]');
+        if (birthDateInput) {
+            birthDateInput.max = today;
+            birthDateInput.min = minDate.toISOString().split('T')[0];
+        }
+    </script>
+}
+
+<style>
+    .required::after {
+        content: " *";
+        color: red;
+    }
+</style> 

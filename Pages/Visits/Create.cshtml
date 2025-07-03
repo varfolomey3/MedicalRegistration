@@ -1,0 +1,317 @@
+@page
+@model MedicalRegistration.Pages.Visits.CreateModel
+@using MedicalRegistration.Models
+
+@{
+    ViewData["Title"] = "Создать визит";
+}
+
+<div class="container-fluid">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Главная</a></li>
+            <li class="breadcrumb-item"><a href="/Visits">Визиты</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Создать визит</li>
+        </ol>
+    </nav>
+
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0 text-gray-800">
+                        <i class="bi bi-plus-circle text-success me-2"></i>
+                        Создать новый визит
+                    </h1>
+                    <p class="text-muted mt-1">Запланируйте новый визит пациента</p>
+                </div>
+                <a asp-page="./Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Назад к списку
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-calendar-plus me-2"></i>
+                        Информация о визите
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row">
+                            <!-- Пациент -->
+                            @if (!Model.IsPatientUser)
+                            {
+                                <div class="col-md-12 mb-3">
+                                    <label asp-for="Visit.PatientId" class="form-label required">Пациент</label>
+                                    <select asp-for="Visit.PatientId" 
+                                            asp-items="Model.PatientsSelectList" 
+                                            class="form-select select2">
+                                        <option value="">Выберите пациента...</option>
+                                    </select>
+                                    <span asp-validation-for="Visit.PatientId" class="text-danger"></span>
+                                </div>
+                            }
+                            else
+                            {
+                                <input asp-for="Visit.PatientId" type="hidden" />
+                                <div class="col-md-12 mb-3">
+                                    <div class="alert alert-info">
+                                        <i class="bi bi-person-check me-2"></i>
+                                        <strong>Визит для:</strong> Ваша учётная запись (пациент)
+                                    </div>
+                                </div>
+                            }
+
+                            <!-- Дата и время -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Visit.VisitDateTime" class="form-label required">Дата и время визита</label>
+                                <input asp-for="Visit.VisitDateTime" 
+                                       type="datetime-local" 
+                                       class="form-control"
+                                       min="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+                                <span asp-validation-for="Visit.VisitDateTime" class="text-danger"></span>
+                            </div>
+
+                            <!-- Статус -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Visit.Status" class="form-label required">Статус</label>
+                                <select asp-for="Visit.Status" 
+                                        asp-items="Model.StatusSelectList" 
+                                        class="form-select">
+                                </select>
+                                <span asp-validation-for="Visit.Status" class="text-danger"></span>
+                            </div>
+
+                            <!-- Врач -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Visit.DoctorName" class="form-label required">Врач</label>
+                                <input asp-for="Visit.DoctorName" 
+                                       class="form-control" 
+                                       placeholder="Введите ФИО врача" 
+                                       maxlength="200" />
+                                <span asp-validation-for="Visit.DoctorName" class="text-danger"></span>
+                            </div>
+
+                            <!-- Специальность -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Visit.Specialty" class="form-label required">Специальность</label>
+                                <input asp-for="Visit.Specialty" 
+                                       class="form-control" 
+                                       placeholder="Например: Терапевт, Кардиолог" 
+                                       maxlength="100" />
+                                <span asp-validation-for="Visit.Specialty" class="text-danger"></span>
+                            </div>
+
+                            <!-- Жалобы -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Visit.Complaints" class="form-label">Жалобы пациента</label>
+                                <textarea asp-for="Visit.Complaints" 
+                                          class="form-control" 
+                                          rows="3" 
+                                          placeholder="Опишите жалобы пациента..."
+                                          maxlength="1000"></textarea>
+                                <span asp-validation-for="Visit.Complaints" class="text-danger"></span>
+                                <div class="form-text">Максимум 1000 символов</div>
+                            </div>
+
+                            <!-- Осмотр -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Visit.Examination" class="form-label">Результаты осмотра</label>
+                                <textarea asp-for="Visit.Examination" 
+                                          class="form-control" 
+                                          rows="4" 
+                                          placeholder="Результаты физического осмотра, анализов и т.д..."
+                                          maxlength="2000"></textarea>
+                                <span asp-validation-for="Visit.Examination" class="text-danger"></span>
+                                <div class="form-text">Максимум 2000 символов</div>
+                            </div>
+
+                            <!-- Стоимость -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Visit.Cost" class="form-label">Стоимость (₽)</label>
+                                <div class="input-group">
+                                    <input asp-for="Visit.Cost" 
+                                           type="number" 
+                                           class="form-control" 
+                                           step="0.01" 
+                                           min="0" 
+                                           max="999999.99"
+                                           placeholder="0.00" />
+                                    <span class="input-group-text">₽</span>
+                                </div>
+                                <span asp-validation-for="Visit.Cost" class="text-danger"></span>
+                            </div>
+
+                            <!-- Заметки -->
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Visit.Notes" class="form-label">Дополнительные заметки</label>
+                                <textarea asp-for="Visit.Notes" 
+                                          class="form-control" 
+                                          rows="3" 
+                                          placeholder="Дополнительная информация о визите..."
+                                          maxlength="1000"></textarea>
+                                <span asp-validation-for="Visit.Notes" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="./Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>
+                                Отмена
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg me-1"></i>
+                                Создать визит
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Информация
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="bi bi-lightbulb me-2"></i>
+                        <strong>Советы:</strong>
+                        <ul class="mb-0 mt-2">
+                            <li>Проверьте правильность выбора пациента</li>
+                            <li>Убедитесь в корректности даты и времени</li>
+                            <li>Заполните все обязательные поля</li>
+                            <li>Добавьте подробное описание жалоб</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="card shadow">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-lightning me-2"></i>
+                        Быстрые действия
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="/Patients/Create" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-person-plus me-1"></i>
+                            Добавить пациента
+                        </a>
+                        <a href="/Patients" class="btn btn-outline-info btn-sm">
+                            <i class="bi bi-people me-1"></i>
+                            Список пациентов
+                        </a>
+                        <a href="/Visits" class="btn btn-outline-secondary btn-sm">
+                            <i class="bi bi-calendar-check me-1"></i>
+                            Все визиты
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.required:after {
+    content: " *";
+    color: red;
+}
+
+.select2 {
+    width: 100% !important;
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    border-bottom: none;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn {
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+}
+
+.alert {
+    border-radius: 0.5rem;
+}
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auto-format cost input
+            const costInput = document.querySelector('input[name="Visit.Cost"]');
+            if (costInput) {
+                costInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/[^\d.]/g, '');
+                    if (value.includes('.')) {
+                        const parts = value.split('.');
+                        if (parts[1] && parts[1].length > 2) {
+                            parts[1] = parts[1].substring(0, 2);
+                        }
+                        value = parts.join('.');
+                    }
+                    e.target.value = value;
+                });
+            }
+
+            // Set minimum datetime to now
+            const dateTimeInput = document.querySelector('input[name="Visit.VisitDateTime"]');
+            if (dateTimeInput) {
+                const now = new Date();
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                dateTimeInput.min = now.toISOString().slice(0, 16);
+            }
+
+            // Character counters for textareas
+            document.querySelectorAll('textarea[maxlength]').forEach(textarea => {
+                const maxLength = textarea.getAttribute('maxlength');
+                const counter = document.createElement('div');
+                counter.className = 'form-text text-end';
+                counter.textContent = `0 / ${maxLength}`;
+                textarea.parentNode.appendChild(counter);
+
+                textarea.addEventListener('input', function() {
+                    const currentLength = this.value.length;
+                    counter.textContent = `${currentLength} / ${maxLength}`;
+                    counter.className = currentLength > maxLength * 0.9 
+                        ? 'form-text text-end text-warning' 
+                        : 'form-text text-end';
+                });
+            });
+        });
+    </script>
+} 

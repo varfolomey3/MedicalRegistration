@@ -1,0 +1,254 @@
+@page
+@model MedicalRegistration.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white text-center">
+                    <h4 class="mb-0">
+                        <i class="bi bi-person-plus-fill me-2"></i>
+                        Регистрация в медицинской системе
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-circle me-2"></i>
+                            <strong>Ошибка:</strong><br />
+                            @Html.Raw(TempData["ErrorMessage"].ToString()!.Replace("\n", "<br />"))
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Закрыть"></button>
+                        </div>
+                    }
+                    
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+                        <!-- Тип пользователя -->
+                        <div class="mb-3">
+                            <label asp-for="Input.UserType" class="form-label fw-bold">
+                                <i class="bi bi-person-gear me-1"></i>
+                                Тип пользователя *
+                            </label>
+                            <select asp-for="Input.UserType" asp-items="Model.UserTypeList" 
+                                    class="form-select" id="userTypeSelect">
+                                <option value="">-- Выберите тип пользователя --</option>
+                            </select>
+                            <span asp-validation-for="Input.UserType" class="text-danger"></span>
+                        </div>
+
+                        <!-- Основная информация -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Input.FirstName" class="form-label">
+                                    <i class="bi bi-person me-1"></i>
+                                    Имя *
+                                </label>
+                                <input asp-for="Input.FirstName" class="form-control" />
+                                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Input.LastName" class="form-label">
+                                    <i class="bi bi-person me-1"></i>
+                                    Фамилия *
+                                </label>
+                                <input asp-for="Input.LastName" class="form-control" />
+                                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Input.MiddleName" class="form-label">
+                                <i class="bi bi-person me-1"></i>
+                                Отчество
+                            </label>
+                            <input asp-for="Input.MiddleName" class="form-control" />
+                            <span asp-validation-for="Input.MiddleName" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Input.DateOfBirth" class="form-label">
+                                    <i class="bi bi-calendar me-1"></i>
+                                    Дата рождения *
+                                </label>
+                                <input asp-for="Input.DateOfBirth" type="date" class="form-control" />
+                                <span asp-validation-for="Input.DateOfBirth" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Input.Gender" class="form-label">
+                                    <i class="bi bi-gender-ambiguous me-1"></i>
+                                    Пол *
+                                </label>
+                                <select asp-for="Input.Gender" asp-items="Model.GenderList" class="form-select">
+                                    <option value="">-- Выберите пол --</option>
+                                </select>
+                                <span asp-validation-for="Input.Gender" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Контактная информация -->
+                        <div class="mb-3">
+                            <label asp-for="Input.Email" class="form-label">
+                                <i class="bi bi-envelope me-1"></i>
+                                Email *
+                            </label>
+                            <input asp-for="Input.Email" class="form-control" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Input.PhoneNumber" class="form-label">
+                                    <i class="bi bi-telephone me-1"></i>
+                                    Телефон
+                                </label>
+                                <input asp-for="Input.PhoneNumber" class="form-control" />
+                                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Input.Address" class="form-label">
+                                    <i class="bi bi-geo-alt me-1"></i>
+                                    Адрес
+                                </label>
+                                <input asp-for="Input.Address" class="form-control" />
+                                <span asp-validation-for="Input.Address" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                                <!-- Специальные поля для врачей -->
+        <div id="doctorFields" style="display: none;">
+            <hr class="my-4">
+            <h6 class="text-primary mb-3">
+                <i class="bi bi-hospital me-2"></i>
+                Информация о враче
+            </h6>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Input.Specialty" class="form-label">
+                        <i class="bi bi-clipboard-pulse me-1"></i>
+                        Специальность *
+                    </label>
+                    <input asp-for="Input.Specialty" class="form-control" />
+                    <span asp-validation-for="Input.Specialty" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Input.LicenseNumber" class="form-label">
+                        <i class="bi bi-award me-1"></i>
+                        Номер лицензии *
+                    </label>
+                    <input asp-for="Input.LicenseNumber" class="form-control" />
+                    <span asp-validation-for="Input.LicenseNumber" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Специальные поля для пациентов -->
+        <div id="patientFields" style="display: none;">
+            <hr class="my-4">
+            <h6 class="text-info mb-3">
+                <i class="bi bi-person-heart me-2"></i>
+                Информация о пациенте
+            </h6>
+            <div class="mb-3">
+                <label asp-for="Input.MedicalCardNumber" class="form-label">
+                    <i class="bi bi-card-text me-1"></i>
+                    Номер медицинской карты *
+                </label>
+                <input asp-for="Input.MedicalCardNumber" class="form-control" />
+                <span asp-validation-for="Input.MedicalCardNumber" class="text-danger"></span>
+            </div>
+        </div>
+
+                        <!-- Пароль -->
+                        <hr class="my-4">
+                        <h6 class="text-secondary mb-3">
+                            <i class="bi bi-shield-lock me-2"></i>
+                            Безопасность
+                        </h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Input.Password" class="form-label">
+                                    <i class="bi bi-lock me-1"></i>
+                                    Пароль *
+                                </label>
+                                <input asp-for="Input.Password" class="form-control" />
+                                <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Input.ConfirmPassword" class="form-label">
+                                    <i class="bi bi-lock-fill me-1"></i>
+                                    Подтверждение пароля *
+                                </label>
+                                <input asp-for="Input.ConfirmPassword" class="form-control" />
+                                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="bi bi-person-plus me-2"></i>
+                                Зарегистрироваться
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center bg-light">
+                    <p class="mb-2">Уже есть аккаунт?</p>
+                    <a asp-page="./Login" class="btn btn-outline-primary">
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                        Войти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Простое показ/скрытие полей без валидации
+        function toggleUserTypeFields() {
+            var userType = document.getElementById('userTypeSelect').value;
+            var doctorFields = document.getElementById('doctorFields');
+            var patientFields = document.getElementById('patientFields');
+            
+            if (userType === '2') { // Doctor
+                doctorFields.style.display = 'block';
+                patientFields.style.display = 'none';
+                // Очищаем поля пациента
+                var medicalCardField = document.querySelector('input[name="Input.MedicalCardNumber"]');
+                if (medicalCardField) medicalCardField.value = '';
+                
+            } else if (userType === '1') { // Patient  
+                doctorFields.style.display = 'none';
+                patientFields.style.display = 'block';
+                // Очищаем поля врача
+                var specialtyField = document.querySelector('input[name="Input.Specialty"]');
+                var licenseField = document.querySelector('input[name="Input.LicenseNumber"]');
+                if (specialtyField) specialtyField.value = '';
+                if (licenseField) licenseField.value = '';
+                
+            } else {
+                doctorFields.style.display = 'none';
+                patientFields.style.display = 'none';
+            }
+        }
+        
+        // Обработчик события и инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('userTypeSelect').addEventListener('change', toggleUserTypeFields);
+            
+            var userTypeSelect = document.getElementById('userTypeSelect');
+            if (userTypeSelect.value) {
+                toggleUserTypeFields();
+            }
+        });
+    </script>
+} 

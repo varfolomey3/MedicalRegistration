@@ -1,0 +1,243 @@
+@page
+@model MedicalRegistration.Pages.Patients.IndexModel
+@{
+    ViewData["Title"] = "Список пациентов";
+    ViewData["Breadcrumb"] = "<li class=\"breadcrumb-item\"><a href=\"/\">Главная</a></li><li class=\"breadcrumb-item active\">Пациенты</li>";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">
+        <i class="bi bi-people text-primary me-2"></i>
+        Список пациентов
+    </h1>
+    <div>
+        <a asp-page="Create" class="btn btn-primary">
+            <i class="bi bi-person-plus me-1"></i>
+            Добавить пациента
+        </a>
+    </div>
+</div>
+
+<!-- Search Form -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-10">
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" class="form-control" name="searchTerm" value="@Model.SearchTerm" 
+                           placeholder="Поиск по имени, фамилии или номеру мед. карты...">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-outline-primary w-100">
+                    <i class="bi bi-search me-1"></i>Найти
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Patients.Any())
+{
+    <!-- Patients Table -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="bi bi-table me-2"></i>
+                    Найдено пациентов: @Model.Patients.Count()
+                </h5>
+                <small class="text-muted">
+                    Показаны результаты поиска
+                </small>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th scope="col" class="px-3">
+                                <i class="bi bi-hash text-muted me-1"></i>
+                                Мед. карта
+                            </th>
+                            <th scope="col">
+                                <i class="bi bi-person text-muted me-1"></i>
+                                ФИО
+                            </th>
+                            <th scope="col">
+                                <i class="bi bi-calendar text-muted me-1"></i>
+                                Возраст
+                            </th>
+                            <th scope="col">
+                                <i class="bi bi-gender-ambiguous text-muted me-1"></i>
+                                Пол
+                            </th>
+                            <th scope="col">
+                                <i class="bi bi-telephone text-muted me-1"></i>
+                                Телефон
+                            </th>
+                            <th scope="col">
+                                <i class="bi bi-envelope text-muted me-1"></i>
+                                Email
+                            </th>
+                            <th scope="col" class="text-center">Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var patient in Model.Patients)
+                        {
+                            <tr>
+                                <td class="px-3">
+                                    <span class="badge bg-secondary">@patient.MedicalCardNumber</span>
+                                </td>
+                                <td>
+                                    <div class="fw-medium">@patient.FullName</div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">@patient.Age лет</span>
+                                </td>
+                                <td>
+                                    @if (patient.Gender == MedicalRegistration.Models.Gender.Male)
+                                    {
+                                        <span class="badge bg-primary">
+                                            <i class="bi bi-gender-male me-1"></i>М
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+                                            <i class="bi bi-gender-female me-1"></i>Ж
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(patient.PhoneNumber))
+                                    {
+                                        <a href="tel:@patient.PhoneNumber" class="text-decoration-none">
+                                            @patient.PhoneNumber
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Не указан</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(patient.Email))
+                                    {
+                                        <a href="mailto:@patient.Email" class="text-decoration-none">
+                                            @patient.Email
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Не указан</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <a asp-page="Details" asp-route-id="@patient.Id" 
+                                           class="btn btn-outline-info" title="Подробности">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-page="Edit" asp-route-id="@patient.Id" 
+                                           class="btn btn-outline-warning" title="Редактировать">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-outline-danger" 
+                                                data-bs-toggle="modal" data-bs-target="#deleteModal-@patient.Id" 
+                                                title="Удалить">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modals -->
+    @foreach (var patient in Model.Patients)
+    {
+        <div class="modal fade" id="deleteModal-@patient.Id" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            Подтверждение удаления
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Вы действительно хотите удалить пациента?</p>
+                        <div class="bg-light p-3 rounded">
+                            <strong>@patient.FullName</strong><br>
+                            <small class="text-muted">Мед. карта: @patient.MedicalCardNumber</small>
+                        </div>
+                        <div class="alert alert-warning mt-3 mb-0">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            <strong>Внимание!</strong> Это действие нельзя отменить.
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                        <form method="post" asp-page-handler="Delete" class="d-inline">
+                            <input type="hidden" name="id" value="@patient.Id" />
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-trash me-1"></i>Удалить
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <!-- No Patients Found -->
+    <div class="card">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-person-x display-1 text-muted mb-3"></i>
+            <h4 class="text-muted mb-3">
+                @if (string.IsNullOrEmpty(Model.SearchTerm))
+                {
+                    <text>Пациенты не найдены</text>
+                }
+                else
+                {
+                    <text>По запросу "@Model.SearchTerm" ничего не найдено</text>
+                }
+            </h4>
+            <p class="text-muted mb-4">
+                @if (string.IsNullOrEmpty(Model.SearchTerm))
+                {
+                    <text>В системе еще нет зарегистрированных пациентов.</text>
+                }
+                else
+                {
+                    <text>Попробуйте изменить поисковый запрос или добавить нового пациента.</text>
+                }
+            </p>
+            <div>
+                @if (!string.IsNullOrEmpty(Model.SearchTerm))
+                {
+                    <a href="@Url.Page("/Patients/Index")" class="btn btn-outline-secondary me-2">
+                        <i class="bi bi-arrow-left me-1"></i>Показать всех
+                    </a>
+                }
+                <a asp-page="Create" class="btn btn-primary">
+                    <i class="bi bi-person-plus me-1"></i>Добавить первого пациента
+                </a>
+            </div>
+        </div>
+    </div>
+} 

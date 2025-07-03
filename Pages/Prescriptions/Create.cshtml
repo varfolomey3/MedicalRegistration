@@ -1,0 +1,279 @@
+@page
+@model MedicalRegistration.Pages.Prescriptions.CreateModel
+@{
+    ViewData["Title"] = "Создать назначение";
+}
+
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="h3 mb-0">
+                        <i class="bi bi-plus-circle text-success me-2"></i>
+                        Создать новое назначение
+                    </h1>
+                    <p class="text-muted mt-1">Добавить назначение к визиту пациента</p>
+                </div>
+                <a asp-page="./Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>
+                    Назад к списку
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-prescription2 me-2"></i>
+                        Информация о назначении
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row">
+                            <!-- Визит -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Prescription.VisitId" class="form-label required">Визит</label>
+                                <select asp-for="Prescription.VisitId" 
+                                        asp-items="Model.VisitsSelectList" 
+                                        class="form-select">
+                                    <option value="">Выберите визит...</option>
+                                </select>
+                                <span asp-validation-for="Prescription.VisitId" class="text-danger"></span>
+                            </div>
+
+                            <!-- Тип назначения -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prescription.Type" class="form-label required">Тип назначения</label>
+                                <select asp-for="Prescription.Type" 
+                                        asp-items="Model.TypeSelectList" 
+                                        class="form-select">
+                                </select>
+                                <span asp-validation-for="Prescription.Type" class="text-danger"></span>
+                            </div>
+
+                            <!-- Приоритет -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prescription.Priority" class="form-label">Приоритет</label>
+                                <select asp-for="Prescription.Priority" 
+                                        asp-items="Model.PrioritySelectList" 
+                                        class="form-select">
+                                </select>
+                                <span asp-validation-for="Prescription.Priority" class="text-danger"></span>
+                            </div>
+
+                            <!-- Название назначения -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Prescription.Name" class="form-label required">Название назначения</label>
+                                <input asp-for="Prescription.Name" 
+                                       class="form-control" 
+                                       placeholder="Введите название препарата или процедуры..." 
+                                       maxlength="300" />
+                                <span asp-validation-for="Prescription.Name" class="text-danger"></span>
+                            </div>
+
+                            <!-- Дозировка и частота -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prescription.Dosage" class="form-label">Дозировка</label>
+                                <input asp-for="Prescription.Dosage" 
+                                       class="form-control" 
+                                       placeholder="Например: 500 мг" 
+                                       maxlength="100" />
+                                <span asp-validation-for="Prescription.Dosage" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prescription.Frequency" class="form-label">Частота приема</label>
+                                <input asp-for="Prescription.Frequency" 
+                                       class="form-control" 
+                                       placeholder="Например: 2 раза в день" 
+                                       maxlength="200" />
+                                <span asp-validation-for="Prescription.Frequency" class="text-danger"></span>
+                            </div>
+
+                            <!-- Продолжительность -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prescription.Duration" class="form-label">Продолжительность</label>
+                                <input asp-for="Prescription.Duration" 
+                                       class="form-control" 
+                                       placeholder="Например: 7 дней" 
+                                       maxlength="100" />
+                                <span asp-validation-for="Prescription.Duration" class="text-danger"></span>
+                            </div>
+
+                            <!-- Статус -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prescription.Status" class="form-label">Статус</label>
+                                <select asp-for="Prescription.Status" 
+                                        asp-items="Model.StatusSelectList" 
+                                        class="form-select">
+                                </select>
+                                <span asp-validation-for="Prescription.Status" class="text-danger"></span>
+                            </div>
+
+                            <!-- Даты -->
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prescription.StartDate" class="form-label required">Дата начала</label>
+                                <input asp-for="Prescription.StartDate" 
+                                       type="datetime-local" 
+                                       class="form-control" />
+                                <span asp-validation-for="Prescription.StartDate" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Prescription.EndDate" class="form-label">Дата окончания</label>
+                                <input asp-for="Prescription.EndDate" 
+                                       type="datetime-local" 
+                                       class="form-control" />
+                                <span asp-validation-for="Prescription.EndDate" class="text-danger"></span>
+                                <div class="form-text">Необязательно</div>
+                            </div>
+
+                            <!-- Инструкции -->
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Prescription.Instructions" class="form-label">Инструкции по применению</label>
+                                <textarea asp-for="Prescription.Instructions" 
+                                          class="form-control" 
+                                          rows="3" 
+                                          placeholder="Подробные инструкции по применению..."
+                                          maxlength="1000"></textarea>
+                                <span asp-validation-for="Prescription.Instructions" class="text-danger"></span>
+                            </div>
+
+                            <!-- Примечания -->
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Prescription.Notes" class="form-label">Примечания</label>
+                                <textarea asp-for="Prescription.Notes" 
+                                          class="form-control" 
+                                          rows="2" 
+                                          placeholder="Дополнительные примечания..."
+                                          maxlength="500"></textarea>
+                                <span asp-validation-for="Prescription.Notes" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between">
+                            <a asp-page="./Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-1"></i>
+                                Отмена
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check me-1"></i>
+                                Создать назначение
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Типы назначений
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="small">
+                        <div class="mb-2">
+                            <span class="badge bg-info me-2">Медикаменты</span>
+                            Лекарственные препараты
+                        </div>
+                        <div class="mb-2">
+                            <span class="badge bg-primary me-2">Процедуры</span>
+                            Медицинские процедуры
+                        </div>
+                        <div class="mb-2">
+                            <span class="badge bg-warning me-2">Анализы</span>
+                            Лабораторные исследования
+                        </div>
+                        <div class="mb-2">
+                            <span class="badge bg-secondary me-2">Диагностика</span>
+                            Диагностические исследования
+                        </div>
+                        <div class="mb-2">
+                            <span class="badge bg-success me-2">Физиотерапия</span>
+                            Физиотерапевтические процедуры
+                        </div>
+                        <div class="mb-2">
+                            <span class="badge bg-info me-2">Консультации</span>
+                            Консультации специалистов
+                        </div>
+                        <div class="mb-2">
+                            <span class="badge bg-danger me-2">Хирургия</span>
+                            Хирургические вмешательства
+                        </div>
+                        <div class="mb-0">
+                            <span class="badge bg-dark me-2">Реабилитация</span>
+                            Реабилитационные мероприятия
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-lightbulb me-2"></i>
+                        Советы
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-light border">
+                        <ul class="mb-0 small">
+                            <li>Выберите соответствующий визит пациента</li>
+                            <li>Укажите точное название препарата или процедуры</li>
+                            <li>При назначении лекарств укажите дозировку и частоту</li>
+                            <li>Добавьте подробные инструкции по применению</li>
+                            <li>Установите даты начала и окончания лечения</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.required:after {
+    content: " *";
+    color: red;
+}
+
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    border-bottom: none;
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.btn {
+    border-radius: 0.5rem;
+}
+
+.alert {
+    border-radius: 0.5rem;
+}
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+} 

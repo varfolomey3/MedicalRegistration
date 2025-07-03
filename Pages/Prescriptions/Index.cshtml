@@ -1,0 +1,336 @@
+@page
+@model MedicalRegistration.Pages.Prescriptions.IndexModel
+@{
+    ViewData["Title"] = "Назначения и рецепты";
+}
+
+<div class="container-fluid">
+    <!-- Header with Statistics -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h1 class="h3 mb-0">
+                        <i class="bi bi-prescription2 text-primary me-2"></i>
+                        Назначения и рецепты
+                    </h1>
+                    <p class="text-muted mt-1">Управление медицинскими назначениями</p>
+                </div>
+                <a asp-page="./Create" class="btn btn-success">
+                    <i class="bi bi-plus-circle me-1"></i>
+                    Создать назначение
+                </a>
+            </div>
+
+            @if (Model.Statistics != null)
+            {
+                <!-- Statistics Cards -->
+                <div class="row g-3 mb-4">
+                    <div class="col-md-2">
+                        <div class="card bg-primary text-white h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-prescription2 fs-1 mb-2"></i>
+                                <h4 class="mb-0">@Model.Statistics.TotalPrescriptions</h4>
+                                <small>Всего назначений</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-success text-white h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-check-circle fs-1 mb-2"></i>
+                                <h4 class="mb-0">@Model.Statistics.ActivePrescriptions</h4>
+                                <small>Активные</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-info text-white h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-check-square fs-1 mb-2"></i>
+                                <h4 class="mb-0">@Model.Statistics.CompletedPrescriptions</h4>
+                                <small>Выполнено</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-danger text-white h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-x-circle fs-1 mb-2"></i>
+                                <h4 class="mb-0">@Model.Statistics.CancelledPrescriptions</h4>
+                                <small>Отменено</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-warning text-dark h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-pause-circle fs-1 mb-2"></i>
+                                <h4 class="mb-0">@(Model.Statistics.CancelledPrescriptions + Model.Statistics.ExpiredPrescriptions)</h4>
+                                <small>Приостановлено</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card bg-secondary text-white h-100">
+                            <div class="card-body text-center">
+                                <i class="bi bi-clock-history fs-1 mb-2"></i>
+                                <h4 class="mb-0">@Model.Statistics.ExpiredPrescriptions</h4>
+                                <small>Просрочено</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Filters and Search -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-funnel me-2"></i>
+                        Фильтры и поиск
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <form method="get">
+                        <div class="row g-3">
+                            <!-- Search -->
+                            <div class="col-md-4">
+                                <label class="form-label">Поиск</label>
+                                <input asp-for="SearchTerm" class="form-control" placeholder="Поиск по названию, пациенту..." />
+                            </div>
+
+                            <!-- Type Filter -->
+                            <div class="col-md-2">
+                                <label class="form-label">Тип</label>
+                                <select asp-for="SelectedType" asp-items="Model.TypeSelectList" class="form-select">
+                                    <option value="">Все типы</option>
+                                </select>
+                            </div>
+
+                            <!-- Status Filter -->
+                            <div class="col-md-2">
+                                <label class="form-label">Статус</label>
+                                <select asp-for="SelectedStatus" asp-items="Model.StatusSelectList" class="form-select">
+                                    <option value="">Все статусы</option>
+                                </select>
+                            </div>
+
+                            <!-- Priority Filter -->
+                            <div class="col-md-2">
+                                <label class="form-label">Приоритет</label>
+                                <select asp-for="SelectedPriority" asp-items="Model.PrioritySelectList" class="form-select">
+                                    <option value="">Все приоритеты</option>
+                                </select>
+                            </div>
+
+                            <!-- Date Range -->
+                            <div class="col-md-2">
+                                <label class="form-label">Период</label>
+                                <div class="input-group">
+                                    <input asp-for="StartDate" type="date" class="form-control" title="От" />
+                                    <input asp-for="EndDate" type="date" class="form-control" title="До" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="bi bi-search me-1"></i>
+                                    Применить фильтры
+                                </button>
+                                <a asp-page="./Index" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-clockwise me-1"></i>
+                                    Сбросить
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prescriptions List -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-0">
+                            <i class="bi bi-list-ul me-2"></i>
+                            Список назначений (@Model.Prescriptions.Count())
+                        </h6>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (Model.Prescriptions.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Пациент</th>
+                                        <th>Назначение</th>
+                                        <th>Тип</th>
+                                        <th>Статус</th>
+                                        <th>Дата начала</th>
+                                        <th width="150">Действия</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var prescription in Model.Prescriptions)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <div>
+                                                        <div class="fw-medium">@prescription.Visit?.Patient?.FullName</div>
+                                                        <small class="text-muted">
+                                                            @prescription.Visit?.VisitDateTime.ToString("dd.MM.yyyy")
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div>
+                                                    <div class="fw-medium">@prescription.Name</div>
+                                                    @if (!string.IsNullOrEmpty(prescription.Dosage))
+                                                    {
+                                                        <small class="text-muted">@prescription.Dosage</small>
+                                                    }
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="badge @IndexModel.GetTypeCssClass(prescription.Type) text-white">
+                                                    @IndexModel.GetTypeDisplayName(prescription.Type)
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge @IndexModel.GetStatusCssClass(prescription.Status) text-white">
+                                                    @IndexModel.GetStatusDisplayName(prescription.Status)
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @prescription.StartDate.ToString("dd.MM.yyyy")
+                                            </td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm" role="group">
+                                                    <a asp-page="./Details" asp-route-id="@prescription.Id" 
+                                                       class="btn btn-outline-info" title="Подробности">
+                                                        <i class="bi bi-eye"></i>
+                                                    </a>
+                                                    <a asp-page="./Edit" asp-route-id="@prescription.Id" 
+                                                       class="btn btn-outline-warning" title="Редактировать">
+                                                        <i class="bi bi-pencil"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-prescription2 display-1 text-muted mb-3"></i>
+                            <h5 class="text-muted mb-3">Назначения не найдены</h5>
+                            <p class="text-muted mb-4">
+                                В системе пока нет ни одного назначения.
+                            </p>
+                            <a asp-page="./Create" class="btn btn-primary">
+                                <i class="bi bi-plus-circle me-1"></i>
+                                Создать первое назначение
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Подтверждение удаления</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены, что хотите удалить назначение <strong id="prescriptionName"></strong>?</p>
+                <p class="text-muted small">Это действие нельзя отменить.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                <form method="post" style="display: inline;" id="deleteForm">
+                    <input type="hidden" name="id" id="prescriptionId" />
+                    <button type="submit" asp-page-handler="Delete" class="btn btn-danger">
+                        <i class="bi bi-trash me-1"></i>
+                        Удалить
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 0.5rem;
+}
+
+.card-header {
+    border-bottom: 1px solid rgba(0,0,0,0.125);
+    border-radius: 0.5rem 0.5rem 0 0 !important;
+}
+
+.table th {
+    border-top: none;
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.btn-group-sm > .btn {
+    padding: 0.25rem 0.5rem;
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+.display-1 {
+    opacity: 0.3;
+}
+</style>
+
+<script>
+function confirmDelete(id, name) {
+    document.getElementById('prescriptionId').value = id;
+    document.getElementById('prescriptionName').textContent = name;
+    
+    var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+}
+
+// Auto-submit form on filter change
+document.addEventListener('DOMContentLoaded', function() {
+    const selects = document.querySelectorAll('select[asp-for]');
+    selects.forEach(select => {
+        select.addEventListener('change', function() {
+            // Optionally auto-submit on change
+            // this.form.submit();
+        });
+    });
+});
+</script> 

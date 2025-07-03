@@ -1,0 +1,368 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Добро пожаловать в МедКлинику";
+}
+
+<!-- Hero секция -->
+<div class="hero-section bg-gradient-to-r from-blue-600 to-green-500 text-white py-5 mb-5" style="background: linear-gradient(135deg, #0066cc 0%, #28a745 100%);">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="bi bi-hospital me-3"></i>
+                    Добро пожаловать в МедКлинику
+                </h1>
+                <p class="lead mb-4">
+                    Современная медицинская информационная система для качественного обслуживания пациентов и эффективной работы врачей
+                </p>
+                <div class="d-flex gap-3">
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a href="/Patients" class="btn btn-light btn-lg">
+                            <i class="bi bi-people me-2"></i>
+                            Управление пациентами
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-page="./Account/Register" class="btn btn-light btn-lg">
+                            <i class="bi bi-person-plus me-2"></i>
+                            Регистрация
+                        </a>
+                        <a asp-page="./Account/Login" class="btn btn-outline-light btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+                            Вход в систему
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <i class="bi bi-hospital-fill" style="font-size: 8rem; opacity: 0.3;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- О клинике -->
+<div class="container">
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="text-center mb-4">
+                <i class="bi bi-heart-pulse me-2 text-primary"></i>
+                О нашей клинике
+            </h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title text-primary">
+                                <i class="bi bi-shield-check me-2"></i>
+                                Наша миссия
+                            </h5>
+                            <p class="card-text">
+                                Предоставление высококачественной медицинской помощи с использованием современных технологий. 
+                                Мы стремимся к улучшению качества жизни наших пациентов через персонализированный подход к лечению.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <h5 class="card-title text-success">
+                                <i class="bi bi-award me-2"></i>
+                                Наши достижения
+                            </h5>
+                            <p class="card-text">
+                                Более 15 лет опыта в медицинской сфере, современное оборудование экспертного класса, 
+                                команда квалифицированных специалистов и более 10,000 довольных пациентов.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Услуги -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="text-center mb-4">
+                <i class="bi bi-clipboard-pulse me-2 text-success"></i>
+                Наши услуги
+            </h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-person-heart display-4 text-primary mb-3"></i>
+                            <h5 class="card-title">Терапия</h5>
+                            <p class="card-text">
+                                Комплексная диагностика и лечение заболеваний внутренних органов. 
+                                Профилактические осмотры и ведение хронических пациентов.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-heart-pulse display-4 text-danger mb-3"></i>
+                            <h5 class="card-title">Кардиология</h5>
+                            <p class="card-text">
+                                Диагностика и лечение заболеваний сердечно-сосудистой системы. 
+                                ЭКГ, УЗИ сердца, холтеровское мониторирование.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-eye display-4 text-info mb-3"></i>
+                            <h5 class="card-title">Неврология</h5>
+                            <p class="card-text">
+                                Лечение заболеваний нервной системы. Диагностика головных болей, 
+                                неврозов, нарушений сна и других неврологических состояний.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-bandaid display-4 text-warning mb-3"></i>
+                            <h5 class="card-title">Хирургия</h5>
+                            <p class="card-text">
+                                Малоинвазивные хирургические вмешательства. Операции на мягких тканях, 
+                                удаление новообразований, лапароскопия.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-prescription2 display-4 text-success mb-3"></i>
+                            <h5 class="card-title">Эндокринология</h5>
+                            <p class="card-text">
+                                Диагностика и лечение заболеваний эндокринной системы. 
+                                Ведение пациентов с диабетом, заболеваниями щитовидной железы.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center p-4">
+                            <i class="bi bi-file-medical display-4 text-secondary mb-3"></i>
+                            <h5 class="card-title">Лабораторная диагностика</h5>
+                            <p class="card-text">
+                                Полный спектр лабораторных исследований. Быстрые результаты, 
+                                современное оборудование, высокая точность анализов.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Преимущества -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <h2 class="text-center mb-4">
+                <i class="bi bi-star me-2 text-warning"></i>
+                Почему выбирают нас
+            </h2>
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <div class="text-center">
+                        <i class="bi bi-clock display-4 text-primary mb-3"></i>
+                        <h5>Быстрое обслуживание</h5>
+                        <p class="text-muted">
+                            Минимальное время ожидания, онлайн-запись на приём
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="text-center">
+                        <i class="bi bi-gear display-4 text-success mb-3"></i>
+                        <h5>Современное оборудование</h5>
+                        <p class="text-muted">
+                            Новейшие медицинские технологии и оборудование экспертного класса
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="text-center">
+                        <i class="bi bi-people display-4 text-info mb-3"></i>
+                        <h5>Опытные врачи</h5>
+                        <p class="text-muted">
+                            Команда высококвалифицированных специалистов с многолетним опытом
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <div class="text-center">
+                        <i class="bi bi-shield-check display-4 text-warning mb-3"></i>
+                        <h5>Безопасность данных</h5>
+                        <p class="text-muted">
+                            Защищённая система хранения медицинских данных и конфиденциальность
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Контакты -->
+    <div class="row mb-5">
+        <div class="col-lg-12">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3 class="mb-0">
+                        <i class="bi bi-telephone me-2"></i>
+                        Контактная информация
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <h6 class="text-primary">
+                                <i class="bi bi-geo-alt me-2"></i>
+                                Адрес
+                            </h6>
+                            <p class="mb-0">
+                                г. Москва, ул. Медицинская, д. 15<br>
+                                метро "Проспект Мира"
+                            </p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6 class="text-success">
+                                <i class="bi bi-telephone me-2"></i>
+                                Телефоны
+                            </h6>
+                            <p class="mb-0">
+                                Регистратура: +7 (495) 123-45-67<br>
+                                Экстренная помощь: +7 (495) 123-45-68
+                            </p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6 class="text-info">
+                                <i class="bi bi-clock me-2"></i>
+                                Время работы
+                            </h6>
+                            <p class="mb-0">
+                                Пн-Пт: 8:00 - 20:00<br>
+                                Сб-Вс: 9:00 - 18:00
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="text-warning">
+                                <i class="bi bi-envelope me-2"></i>
+                                Email
+                            </h6>
+                            <p class="mb-0">
+                                info@medclinic.ru<br>
+                                appointment@medclinic.ru
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-secondary">
+                                <i class="bi bi-globe me-2"></i>
+                                Социальные сети
+                            </h6>
+                            <div class="d-flex gap-2">
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-telegram"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-whatsapp"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-instagram"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Система возможностей для врачей и пациентов -->
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <div class="alert alert-success border-0 shadow-sm">
+                    <h5 class="alert-heading">
+                        <i class="bi bi-check-circle me-2"></i>
+                        Добро пожаловать в систему!
+                    </h5>
+                    <p class="mb-0">
+                        Вы успешно авторизованы в медицинской информационной системе. 
+                        Используйте навигационное меню для доступа к функциям системы.
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row mb-5">
+            <div class="col-lg-12">
+                <div class="alert alert-info border-0 shadow-sm">
+                    <h5 class="alert-heading">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Новый пациент или врач?
+                    </h5>
+                    <p class="mb-3">
+                        Зарегистрируйтесь в нашей системе для получения доступа к полному функционалу 
+                        медицинской информационной системы.
+                    </p>
+                    <div class="d-flex gap-2">
+                        <a asp-page="./Account/Register" class="btn btn-primary">
+                            <i class="bi bi-person-plus me-2"></i>
+                            Регистрация
+                        </a>
+                        <a asp-page="./Account/Login" class="btn btn-outline-primary">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>
+                            Уже есть аккаунт?
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .hero-section {
+        margin: -20px -15px 0 -15px;
+        padding: 80px 15px;
+    }
+    
+    .card {
+        transition: transform 0.2s ease-in-out;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    
+         @media (max-width: 768px) {
+         .hero-section {
+             padding: 40px 15px;
+         }
+         
+         .display-4 {
+             font-size: 2rem;
+         }
+     }
+</style> 
